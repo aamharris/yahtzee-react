@@ -1,24 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import Scorecard from './scorecard';
+import DiceContainer from './dice-container';
+
+export interface YahtzeeDice {
+  id: number;
+  isLocked: boolean,
+  value?: number
+}
 
 function App() {
+  let initDice:YahtzeeDice[] = new Array(5)  
+
+  for(var i = 0;i < initDice.length;i++) { 
+    initDice[i] = { id: i, isLocked: false, value: undefined}
+  }
+
+  const [dice, setDice] = useState<YahtzeeDice[]>(initDice);
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Scorecard />
+      <DiceContainer dice={dice} onDiceChanged={(d) => {setDice(d)}} />
     </div>
   );
 }
