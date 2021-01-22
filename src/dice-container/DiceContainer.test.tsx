@@ -5,13 +5,19 @@ import { YahtzeeDice } from '../App';
 
 describe('DiceContainer', () => {
     describe('Dice', () => {
+        const renderDiceContainer = (dice: YahtzeeDice[]) => {
+            render(<DiceContainer dice={dice} 
+                onDiceRolled={jest.fn()} 
+                onDiceClicked={jest.fn()}
+                canRollDice={true} />);
+        }
         it('displays all dice values', () => {
             const dice: YahtzeeDice[] = [
                 { id: 1, value: 1, isLocked: false},
                 { id: 2, value: 2, isLocked: false},
             ]
     
-            render(<DiceContainer dice={dice} onDiceRolled={jest.fn()} onDiceClicked={jest.fn()} />);
+            renderDiceContainer(dice);
             expect(screen.getByText("1")).toBeInTheDocument();
             expect(screen.getByText("2")).toBeInTheDocument();
         });
@@ -21,9 +27,18 @@ describe('DiceContainer', () => {
                 { id: 1, value: undefined, isLocked: false},
             ]
     
-            render(<DiceContainer dice={dice} onDiceRolled={jest.fn()} onDiceClicked={jest.fn()} />);
+            renderDiceContainer(dice);
             expect(screen.getByText("-")).toBeInTheDocument();
         });
+
+        it('highlights locked dice', () => {
+            const dice: YahtzeeDice[] = [
+                { id: 1, value: undefined, isLocked: true},
+            ]
+
+            renderDiceContainer(dice);
+            expect(screen.getByTestId('dice-1')).toHaveStyle('border: 1px solid yellow');
+        })
     })
 
     describe('roll dice', () => {
@@ -34,7 +49,12 @@ describe('DiceContainer', () => {
         }
 
         const renderDiceContainer = (dice: YahtzeeDice): void => {
-            render(<DiceContainer dice={[dice]} onDiceRolled={onRollClicked} onDiceClicked={() => {}} />);
+            render(<DiceContainer 
+                dice={[dice]} 
+                onDiceRolled={onRollClicked} 
+                onDiceClicked={() => {}}
+                canRollDice={true}
+                 />);
         }
 
         beforeEach(() => {
