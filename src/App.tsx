@@ -22,7 +22,13 @@ function App() {
   return (
     <div>
       <Scorecard />
-      <DiceContainer dice={dice} onDiceChanged={(d) => {setDice(d)}} />
+      <DiceContainer dice={dice} 
+        onDiceRolled={(allDice) => {setDice(allDice)}} 
+        onDiceClicked={(selectedDice) => {
+          let diceCopy = dice.slice();
+          diceCopy[selectedDice.id].isLocked = !diceCopy[selectedDice.id].isLocked;
+          setDice(diceCopy);         
+      }} />
     </div>
   );
 }
