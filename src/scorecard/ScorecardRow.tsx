@@ -6,10 +6,10 @@ type ScorecardRowProps = {
 
 function ScorecardRow({ title, score, possibleScore }: ScorecardRowProps) {
     return (
-        <div style={{display: 'flex'}}>
-            <div style={{flexGrow: 1,  flexBasis: '100%'}}>{title}</div>
-            <div style={{flexGrow: 1, flexBasis: '100%'}}>{score ? score : possibleScore}</div>
-        </div>
+        <tr>
+            <td>{title}</td>
+            <td>{score ? score : possibleScore}</td>
+        </tr>
     );
 }
 
