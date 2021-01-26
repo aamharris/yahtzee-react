@@ -3,24 +3,42 @@ import { YahtzeeDice } from '../App';
 import { FULL_HOUSE_SCORE, LG_STRAIGHT_SCORE, SM_STRAIGHT_SCORE, YAHTZEE_SCORE } from '../constants';
 import ScorecardRow from './ScorecardRow';
 
-export type YahtzeeScorecard = {
-    upperSection: {
-        aces?: number,
-        twos?: number,
-        threes?: number,
-        fours?: number,
-        fives?: number,
-        sixes?: number,
-    },
-    lowerSection: {
-        threeOfAKind?: number,
-        fourOfAKind?: number,
-        fullHouse?: number,
-        smallStraight?: number,
-        largeStraight?: number,
-        yahtzee?: number,
-        chance?: number,
-        yahtzeeBonusCount?: number,
+interface Score {
+    possibleScore?: number,
+    markedScore?: number
+}
+
+export class YahtzeeScorecard {
+    aces: Score;
+    twos: Score;
+    threes: Score;
+    fours: Score;
+    fives: Score;
+    sixes: Score;
+    threeOfAKind: Score;
+    fourOfAKind: Score;
+    fullHouse: Score;
+    smallStraight: Score;
+    largeStraight: Score;
+    chance: Score;
+    yahtzee: Score;
+    yahtzeeBonus: Score;
+
+    constructor() {
+        this.aces = { possibleScore: undefined, markedScore: undefined}
+        this.twos = { possibleScore: undefined, markedScore: undefined}
+        this.threes = { possibleScore: undefined, markedScore: undefined}
+        this.fours = { possibleScore: undefined, markedScore: undefined}
+        this.fives = { possibleScore: undefined, markedScore: undefined}
+        this.sixes = { possibleScore: undefined, markedScore: undefined}
+        this.threeOfAKind = { possibleScore: undefined, markedScore: undefined}
+        this.fourOfAKind = { possibleScore: undefined, markedScore: undefined}
+        this.fullHouse = { possibleScore: undefined, markedScore: undefined}
+        this.smallStraight = { possibleScore: undefined, markedScore: undefined}
+        this.largeStraight = { possibleScore: undefined, markedScore: undefined}
+        this.yahtzee = { possibleScore: undefined, markedScore: undefined}
+        this.chance = { possibleScore: undefined, markedScore: undefined}
+        this.yahtzeeBonus = { possibleScore: undefined, markedScore: undefined}
     }
 }
 
@@ -29,7 +47,7 @@ type ScorecardProps = {
 }
 
 export default function Scorecard({ dice }: ScorecardProps) {
-    const [possibleScores, setPossibleScores] = useState(initializeScorecard())
+    const [scores, setScores] = useState(new YahtzeeScorecard())
 
     let totalCountOfDiceByValue: Map<number, number>;
 
@@ -70,6 +88,12 @@ export default function Scorecard({ dice }: ScorecardProps) {
         }, 0)
     }
 
+    const updateScorecardRow = (row: Score, updateFunc: Function): void => {
+        if (!row.markedScore) {
+            row.possibleScore = updateFunc();
+        }
+    }
+
     function calculatePossibleScores(dice: YahtzeeDice[]) {
         totalCountOfDiceByValue = new Map<number, number>();
         dice.forEach((d) => {
@@ -82,45 +106,25 @@ export default function Scorecard({ dice }: ScorecardProps) {
             }           
         });
 
+        let scorecard: YahtzeeScorecard = {...scores};
+
         const diceTotal = getDiceTotal();
 
-        possibleScores.upperSection.aces = getSumOfDiceWithTheNumber(1);
-        possibleScores.upperSection.twos = getSumOfDiceWithTheNumber(2);
-        possibleScores.upperSection.threes = getSumOfDiceWithTheNumber(3);
-        possibleScores.upperSection.fours = getSumOfDiceWithTheNumber(4);
-        possibleScores.upperSection.fives = getSumOfDiceWithTheNumber(5);
-        possibleScores.upperSection.sixes = getSumOfDiceWithTheNumber(6);
-        possibleScores.lowerSection.fullHouse = hasFullHouse() ? FULL_HOUSE_SCORE : 0;
-        possibleScores.lowerSection.smallStraight = hasSmallStraight() ? SM_STRAIGHT_SCORE : 0;
-        possibleScores.lowerSection.largeStraight = totalCountOfDiceByValue.size === 5 ? LG_STRAIGHT_SCORE : 0;
-        possibleScores.lowerSection.threeOfAKind = hasNumberOfSameDice(3) ? diceTotal : 0;
-        possibleScores.lowerSection.fourOfAKind = hasNumberOfSameDice(4) ? diceTotal : 0;
-        possibleScores.lowerSection.chance = diceTotal;
-        possibleScores.lowerSection.yahtzee = hasNumberOfSameDice(5) ? YAHTZEE_SCORE : 0;
-        setPossibleScores({...possibleScores})
-    }
+        updateScorecardRow(scorecard.aces, () => getSumOfDiceWithTheNumber(1));
+        updateScorecardRow(scorecard.twos, () => getSumOfDiceWithTheNumber(2));
+        updateScorecardRow(scorecard.threes, () => getSumOfDiceWithTheNumber(3));
+        updateScorecardRow(scorecard.fours, () => getSumOfDiceWithTheNumber(4));
+        updateScorecardRow(scorecard.fives, () => getSumOfDiceWithTheNumber(5));
+        updateScorecardRow(scorecard.sixes, () => getSumOfDiceWithTheNumber(6));
 
-    function initializeScorecard(): YahtzeeScorecard {    
-        return {
-            upperSection: { 
-                aces: undefined,
-                twos: undefined,
-                threes: undefined,
-                fours: undefined,
-                fives: undefined,
-                sixes: undefined,
-            },
-            lowerSection: {
-                threeOfAKind: undefined,
-                fourOfAKind: undefined,
-                fullHouse: undefined,
-                smallStraight: undefined,
-                largeStraight: undefined,
-                yahtzee: undefined,
-                chance: undefined,
-                yahtzeeBonusCount: undefined,
-            }
-        }
+        updateScorecardRow(scorecard.fullHouse, () => hasFullHouse() ? FULL_HOUSE_SCORE : 0);
+        updateScorecardRow(scorecard.smallStraight, () => hasSmallStraight() ? SM_STRAIGHT_SCORE : 0);
+        updateScorecardRow(scorecard.largeStraight, () => totalCountOfDiceByValue.size === 5 ? LG_STRAIGHT_SCORE : 0);
+        updateScorecardRow(scorecard.threeOfAKind, () =>  hasNumberOfSameDice(3) ? diceTotal : 0);
+        updateScorecardRow(scorecard.fourOfAKind, () => hasNumberOfSameDice(4) ? diceTotal : 0);
+        updateScorecardRow(scorecard.chance, () => diceTotal);
+        updateScorecardRow(scorecard.yahtzee, () => hasNumberOfSameDice(5) ? YAHTZEE_SCORE : 0);
+        setScores(scorecard);
     }
 
     return (
@@ -130,14 +134,14 @@ export default function Scorecard({ dice }: ScorecardProps) {
                 <th>Upper Section</th>
             </tr>
             </thead>
-            <tbody name="tbody">
-                <ScorecardRow title={'Aces'} score={undefined} possibleScore={possibleScores.upperSection.aces} />
-                <ScorecardRow title={'Twos'} score={undefined} possibleScore={possibleScores.upperSection.twos} />
-                <ScorecardRow title={'Threes'} score={undefined} possibleScore={possibleScores.upperSection.threes} />
-                <ScorecardRow title={'Fours'} score={undefined} possibleScore={possibleScores.upperSection.fours} />
-                <ScorecardRow title={'Fives'} score={undefined} possibleScore={possibleScores.upperSection.fives} />
-                <ScorecardRow title={'Sixes'} score={undefined} possibleScore={possibleScores.upperSection.sixes} />
-                <ScorecardRow title={'BONUS'} score={undefined} possibleScore={possibleScores.lowerSection.chance} />
+            <tbody>
+                <ScorecardRow title={'Aces'} score={undefined} possibleScore={scores.aces.possibleScore} />
+                <ScorecardRow title={'Twos'} score={undefined} possibleScore={scores.twos.possibleScore} />
+                <ScorecardRow title={'Threes'} score={undefined} possibleScore={scores.threes.possibleScore} />
+                <ScorecardRow title={'Fours'} score={undefined} possibleScore={scores.fours.possibleScore} />
+                <ScorecardRow title={'Fives'} score={undefined} possibleScore={scores.fives.possibleScore} />
+                <ScorecardRow title={'Sixes'} score={undefined} possibleScore={scores.sixes.possibleScore} />
+                <ScorecardRow title={'BONUS'} score={undefined} possibleScore={undefined} />
             </tbody>
             <thead>
             <tr>
@@ -145,13 +149,13 @@ export default function Scorecard({ dice }: ScorecardProps) {
             </tr>
             </thead>
             <tbody>
-                <ScorecardRow title={'3 of a Kind'} score={undefined} possibleScore={possibleScores.lowerSection.threeOfAKind} />
-                <ScorecardRow title={'4 of a Kind'} score={undefined} possibleScore={possibleScores.lowerSection.fourOfAKind} />
-                <ScorecardRow title={'Full House'} score={undefined} possibleScore={possibleScores.lowerSection.fullHouse} />
-                <ScorecardRow title={'Sm. Straight'} score={undefined} possibleScore={possibleScores.lowerSection.smallStraight} />
-                <ScorecardRow title={'Lg. Straight'} score={undefined} possibleScore={possibleScores.lowerSection.largeStraight} />
-                <ScorecardRow title={'Chance'} score={undefined} possibleScore={possibleScores.lowerSection.chance} />
-                <ScorecardRow title={'YAHTZEE'} score={undefined} possibleScore={possibleScores.lowerSection.yahtzee} />
+                <ScorecardRow title={'3 of a Kind'} score={undefined} possibleScore={scores.threeOfAKind.possibleScore} />
+                <ScorecardRow title={'4 of a Kind'} score={undefined} possibleScore={scores.fourOfAKind.possibleScore} />
+                <ScorecardRow title={'Full House'} score={undefined} possibleScore={scores.fullHouse.possibleScore} />
+                <ScorecardRow title={'Sm. Straight'} score={undefined} possibleScore={scores.smallStraight.possibleScore} />
+                <ScorecardRow title={'Lg. Straight'} score={undefined} possibleScore={scores.largeStraight.possibleScore} />
+                <ScorecardRow title={'Chance'} score={undefined} possibleScore={scores.chance.possibleScore} />
+                <ScorecardRow title={'YAHTZEE'} score={undefined} possibleScore={scores.yahtzee.possibleScore} />
                 <ScorecardRow title={'Yahtzee Bonus!'} score={undefined} possibleScore={0} />
             </tbody>          
         </table>
