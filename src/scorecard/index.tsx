@@ -3,9 +3,26 @@ import { YahtzeeDice } from '../App';
 import { FULL_HOUSE_SCORE, LG_STRAIGHT_SCORE, SM_STRAIGHT_SCORE, YAHTZEE_SCORE } from '../constants';
 import ScorecardRow from './ScorecardRow';
 
-interface Score {
+export interface Score {
     possibleScore?: number,
-    markedScore?: number
+    markedScore?: number,
+    category: string,
+}
+
+enum ScoringCategory {
+    aces = 'Aces',
+    twos = 'Twos',
+    threes = 'Threes',
+    fours = 'Fours',
+    fives = 'Fives',
+    sixes = 'Sixes',
+    threeOfAKind = '3 of a Kind',
+    fourOfAKind = '4 of a Kind',
+    fullHouse = 'Full House',
+    smallStraight = 'Sm. Straight',
+    largeStraight = 'Lg. Straight',
+    chance = 'Chance',
+    yahtzee = 'YAHTZEE',
 }
 
 export class YahtzeeScorecard {
@@ -22,23 +39,21 @@ export class YahtzeeScorecard {
     largeStraight: Score;
     chance: Score;
     yahtzee: Score;
-    yahtzeeBonus: Score;
 
     constructor() {
-        this.aces = { possibleScore: undefined, markedScore: undefined}
-        this.twos = { possibleScore: undefined, markedScore: undefined}
-        this.threes = { possibleScore: undefined, markedScore: undefined}
-        this.fours = { possibleScore: undefined, markedScore: undefined}
-        this.fives = { possibleScore: undefined, markedScore: undefined}
-        this.sixes = { possibleScore: undefined, markedScore: undefined}
-        this.threeOfAKind = { possibleScore: undefined, markedScore: undefined}
-        this.fourOfAKind = { possibleScore: undefined, markedScore: undefined}
-        this.fullHouse = { possibleScore: undefined, markedScore: undefined}
-        this.smallStraight = { possibleScore: undefined, markedScore: undefined}
-        this.largeStraight = { possibleScore: undefined, markedScore: undefined}
-        this.yahtzee = { possibleScore: undefined, markedScore: undefined}
-        this.chance = { possibleScore: undefined, markedScore: undefined}
-        this.yahtzeeBonus = { possibleScore: undefined, markedScore: undefined}
+        this.aces = { category: ScoringCategory.aces } as Score
+        this.twos = { category: ScoringCategory.twos } as Score
+        this.threes = { category: ScoringCategory.threes } as Score
+        this.fours = { category: ScoringCategory.fours } as Score
+        this.fives = { category: ScoringCategory.fives } as Score
+        this.sixes = { category: ScoringCategory.sixes } as Score
+        this.threeOfAKind =  { category: ScoringCategory.threeOfAKind } as Score
+        this.fourOfAKind = { category: ScoringCategory.fourOfAKind } as Score
+        this.fullHouse =  { category: ScoringCategory.fullHouse } as Score
+        this.smallStraight =  { category: ScoringCategory.smallStraight } as Score
+        this.largeStraight =  { category: ScoringCategory.largeStraight } as Score
+        this.chance =  { category: ScoringCategory.chance } as Score
+        this.yahtzee = { category: ScoringCategory.yahtzee } as Score
     }
 }
 
@@ -48,6 +63,7 @@ type ScorecardProps = {
 
 export default function Scorecard({ dice }: ScorecardProps) {
     const [scores, setScores] = useState(new YahtzeeScorecard())
+    const [selectedScore, setSelectedScore] = useState<Score | null>(null)
 
     let totalCountOfDiceByValue: Map<number, number>;
 
@@ -94,7 +110,11 @@ export default function Scorecard({ dice }: ScorecardProps) {
         }
     }
 
-    function calculatePossibleScores(dice: YahtzeeDice[]) {
+    const isRowSelected = (score: Score): boolean => {
+        return selectedScore?.category == score.category;
+    }
+
+    const calculatePossibleScores = (dice: YahtzeeDice[]): void => {
         totalCountOfDiceByValue = new Map<number, number>();
         dice.forEach((d) => {
             if (d.value) {
@@ -135,13 +155,12 @@ export default function Scorecard({ dice }: ScorecardProps) {
             </tr>
             </thead>
             <tbody>
-                <ScorecardRow title={'Aces'} score={undefined} possibleScore={scores.aces.possibleScore} />
-                <ScorecardRow title={'Twos'} score={undefined} possibleScore={scores.twos.possibleScore} />
-                <ScorecardRow title={'Threes'} score={undefined} possibleScore={scores.threes.possibleScore} />
-                <ScorecardRow title={'Fours'} score={undefined} possibleScore={scores.fours.possibleScore} />
-                <ScorecardRow title={'Fives'} score={undefined} possibleScore={scores.fives.possibleScore} />
-                <ScorecardRow title={'Sixes'} score={undefined} possibleScore={scores.sixes.possibleScore} />
-                <ScorecardRow title={'BONUS'} score={undefined} possibleScore={undefined} />
+                <ScorecardRow score={scores.aces} onScoreSelected={setSelectedScore} isSelected={isRowSelected(scores.aces)} />
+                <ScorecardRow score={scores.twos} onScoreSelected={setSelectedScore} isSelected={isRowSelected(scores.twos)} />
+                <ScorecardRow score={scores.threes} onScoreSelected={setSelectedScore} isSelected={isRowSelected(scores.threes)} />
+                <ScorecardRow score={scores.fours} onScoreSelected={setSelectedScore} isSelected={isRowSelected(scores.fours)} />
+                <ScorecardRow score={scores.fives} onScoreSelected={setSelectedScore} isSelected={isRowSelected(scores.fives)} />
+                <ScorecardRow score={scores.sixes} onScoreSelected={setSelectedScore} isSelected={isRowSelected(scores.sixes)} />              
             </tbody>
             <thead>
             <tr>
@@ -149,15 +168,15 @@ export default function Scorecard({ dice }: ScorecardProps) {
             </tr>
             </thead>
             <tbody>
-                <ScorecardRow title={'3 of a Kind'} score={undefined} possibleScore={scores.threeOfAKind.possibleScore} />
-                <ScorecardRow title={'4 of a Kind'} score={undefined} possibleScore={scores.fourOfAKind.possibleScore} />
-                <ScorecardRow title={'Full House'} score={undefined} possibleScore={scores.fullHouse.possibleScore} />
-                <ScorecardRow title={'Sm. Straight'} score={undefined} possibleScore={scores.smallStraight.possibleScore} />
-                <ScorecardRow title={'Lg. Straight'} score={undefined} possibleScore={scores.largeStraight.possibleScore} />
-                <ScorecardRow title={'Chance'} score={undefined} possibleScore={scores.chance.possibleScore} />
-                <ScorecardRow title={'YAHTZEE'} score={undefined} possibleScore={scores.yahtzee.possibleScore} />
-                <ScorecardRow title={'Yahtzee Bonus!'} score={undefined} possibleScore={0} />
+                <ScorecardRow score={scores.threeOfAKind} onScoreSelected={setSelectedScore} />
+                <ScorecardRow score={scores.fourOfAKind} onScoreSelected={setSelectedScore} />
+                <ScorecardRow score={scores.fullHouse} onScoreSelected={setSelectedScore} />
+                <ScorecardRow score={scores.smallStraight} onScoreSelected={setSelectedScore} />
+                <ScorecardRow score={scores.largeStraight} onScoreSelected={setSelectedScore} />
+                <ScorecardRow score={scores.chance} onScoreSelected={setSelectedScore} />
+                <ScorecardRow score={scores.yahtzee} onScoreSelected={setSelectedScore} />
             </tbody>          
         </table>
     )
+
 }
