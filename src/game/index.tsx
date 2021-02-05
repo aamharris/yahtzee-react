@@ -4,6 +4,8 @@ import DiceContainer from "../dice-container";
 import Scorecard, { YahtzeeScorecard2 } from "../scorecard";
 import { MAX_ROLL_PER_ROUND, MAX_ROUND_COUNT } from "../constants";
 import { createNewScorecard } from "../scorecard/scorecardManager";
+import Container from "@material-ui/core/Container";
+import Box from "@material-ui/core/Box";
 
 export interface YahtzeeDice {
   id: number;
@@ -52,23 +54,25 @@ function Game() {
   };
 
   return (
-    <div>
-      <div>Round {gameRound} / 13</div>
-      <Scorecard
-        dice={dice}
-        scorecard={scorecard}
-        onScoreMarked={setNextRound}
-        onScorecardChanged={onScorecardChanged}
-        canSelectScore={canSelectScore}
-      />
-      <DiceContainer
-        dice={dice}
-        onDiceClicked={onDiceClicked}
-        canRollDice={currentRollCount !== MAX_ROLL_PER_ROUND && !isGameOver}
-        onDiceRolled={onDiceRolled}
-      />
-      {isGameOver && "Game Over!"}
-    </div>
+    <Container maxWidth={"sm"}>
+      <Box flex justifyContent={"center"}>
+        <div>Round {gameRound} / 13</div>
+        <Scorecard
+          dice={dice}
+          scorecard={scorecard}
+          onScoreMarked={setNextRound}
+          onScorecardChanged={onScorecardChanged}
+          canSelectScore={canSelectScore}
+        />
+        <DiceContainer
+          dice={dice}
+          onDiceClicked={onDiceClicked}
+          canRollDice={currentRollCount !== MAX_ROLL_PER_ROUND && !isGameOver}
+          onDiceRolled={onDiceRolled}
+        />
+        {isGameOver && "Game Over!"}
+      </Box>
+    </Container>
   );
 }
 

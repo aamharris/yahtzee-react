@@ -41,7 +41,7 @@ function Scorecard({ dice, scorecard, onScorecardChanged, onScoreMarked, canSele
 
   return (
     <div>
-      <table style={{ width: "200px" }}>
+      <table style={{ borderCollapse: "collapse" }}>
         <thead>
           <tr>
             <th>Upper Section</th>
