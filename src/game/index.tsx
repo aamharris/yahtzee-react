@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import "./Game.css";
-import DiceContainer from "./dice-container";
-import Scorecard, { YahtzeeScorecard2 } from "./scorecard";
-import { MAX_ROLL_PER_ROUND, MAX_ROUND_COUNT } from "./constants";
-import { createNewScorecard } from "./scorecard/scorecardManager";
+import DiceContainer from "../dice-container";
+import Scorecard, { YahtzeeScorecard2 } from "../scorecard";
+import { MAX_ROLL_PER_ROUND, MAX_ROUND_COUNT } from "../constants";
+import { createNewScorecard } from "../scorecard/scorecardManager";
 
 export interface YahtzeeDice {
   id: number;

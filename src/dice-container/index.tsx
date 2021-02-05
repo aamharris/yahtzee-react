@@ -1,4 +1,4 @@
-import { YahtzeeDice } from "../Game";
+import { YahtzeeDice } from "../game";
 
 type DiceContainerProps = {
   dice: YahtzeeDice[];

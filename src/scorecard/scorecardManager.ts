@@ -1,6 +1,6 @@
 import { ScorecardRowData, YahtzeeScorecard2 } from ".";
 import { FULL_HOUSE_SCORE, LG_STRAIGHT_SCORE, SM_STRAIGHT_SCORE, YAHTZEE_SCORE } from "../constants";
-import { YahtzeeDice } from "../Game";
+import { YahtzeeDice } from "../game";
 
 export function createNewScorecard(): YahtzeeScorecard2 {
   return {

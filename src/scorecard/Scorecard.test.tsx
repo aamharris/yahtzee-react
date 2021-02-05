@@ -1,7 +1,7 @@
 import React from "react";
 import { act, findByRole, fireEvent, render, screen, waitFor, waitForElement, within } from "@testing-library/react";
 import Scorecard from ".";
-import { YahtzeeDice } from "../Game";
+import { YahtzeeDice } from "../game";
 import { FULL_HOUSE_SCORE, LG_STRAIGHT_SCORE, SM_STRAIGHT_SCORE, YAHTZEE_SCORE } from "../constants";
 import { createNewScorecard } from "./scorecardManager";
 

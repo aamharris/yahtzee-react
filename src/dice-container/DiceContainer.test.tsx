@@ -1,7 +1,7 @@
 import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import DiceContainer from ".";
-import { YahtzeeDice } from "../Game";
+import { YahtzeeDice } from "../game";
 
 describe("DiceContainer", () => {
   describe("Dice", () => {

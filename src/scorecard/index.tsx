@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { YahtzeeDice } from "../Game";
+import { YahtzeeDice } from "../game";
 import { FULL_HOUSE_SCORE, LG_STRAIGHT_SCORE, SM_STRAIGHT_SCORE, YAHTZEE_SCORE } from "../constants";
 import ScorecardRow from "./ScorecardRow";
 import ScorecardCalculator from "./scorecardManager";
