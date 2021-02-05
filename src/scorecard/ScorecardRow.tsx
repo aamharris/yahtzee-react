@@ -8,7 +8,7 @@ type ScorecardRowProps = {
 function ScorecardRow({ scorecardRowData, onScoreClicked }: ScorecardRowProps) {
   const { category, markedScore, possibleScore } = scorecardRowData;
   return (
-    <tr>
+    <tr role="row">
       <td>{category}</td>
       <td style={{ cursor: "pointer" }}>
         {markedScore !== undefined ? (

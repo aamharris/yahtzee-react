@@ -1,8 +1,9 @@
 import React from "react";
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { act, findByRole, fireEvent, render, screen, waitFor, waitForElement, within } from "@testing-library/react";
 import Scorecard from ".";
 import { YahtzeeDice } from "../Game";
 import { FULL_HOUSE_SCORE, LG_STRAIGHT_SCORE, SM_STRAIGHT_SCORE, YAHTZEE_SCORE } from "../constants";
+import { createNewScorecard } from "./scorecardManager";
 
 describe("Scorecard", () => {
   class DiceBuilder {
@@ -23,7 +24,28 @@ describe("Scorecard", () => {
   }
 
   const renderScorecard = (dice: YahtzeeDice[]) => {
-    render(<Scorecard dice={dice} onScoreMarked={jest.fn} />);
+    const defaultScorecard = createNewScorecard();
+    const { rerender } = render(
+      <Scorecard
+        dice={dice}
+        onScoreMarked={jest.fn}
+        canSelectScore={true}
+        onScorecardChanged={jest.fn}
+        scorecard={defaultScorecard}
+      />
+    );
+    // Because the logic for updating the scorecard is in the useEffect hook,
+    // this has to be rerendered.
+    // See https://github.com/testing-library/react-testing-library/issues/215
+    rerender(
+      <Scorecard
+        dice={dice}
+        onScoreMarked={jest.fn}
+        canSelectScore={true}
+        onScorecardChanged={jest.fn}
+        scorecard={defaultScorecard}
+      />
+    );
   };
 
   it("calculates the total for aces", () => {
