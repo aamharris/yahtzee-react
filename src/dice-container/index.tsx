@@ -1,4 +1,4 @@
-import { YahtzeeDice } from "../App";
+import { YahtzeeDice } from "../Game";
 
 type DiceContainerProps = {
   dice: YahtzeeDice[];
@@ -8,10 +8,6 @@ type DiceContainerProps = {
 };
 
 export default function DiceContainer({ dice, canRollDice, onDiceRolled, onDiceClicked }: DiceContainerProps) {
-  // const resetDice = (): YahtzeeDice[] => {
-  //    return dice.map((d) => {return {...d, isLocked: false}});
-  // }
-
   const rollDice = (): void => {
     const diceRoll: YahtzeeDice[] = dice.map((d) => {
       if (!d.isLocked) {

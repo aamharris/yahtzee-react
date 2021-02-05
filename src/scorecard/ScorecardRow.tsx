@@ -1,18 +1,26 @@
-// type ScorecardRowProps = {
-//     score: ScoreEntry,
-//     onScoreSelected: (currentScore: ScoreEntry) => void
-// }
+import { ScorecardRowData } from ".";
 
-function ScorecardRow() {
-    // const { displayName, possibleScore, markedScore, isSelected } = score;
-    // return (
-    //     <tr>
-    //         <td>{displayName}</td>
-    //         <td style={{cursor: 'pointer'}}>
-    //             {markedScore ? markedScore : 
-    //             <span onClick={() => onScoreSelected({...score})} style={{color: isSelected ? 'red' : 'lightgray'}}>{possibleScore}</span>}</td>
-    //     </tr>
-    // );
+type ScorecardRowProps = {
+  scorecardRowData: ScorecardRowData;
+  onScoreClicked: (row: ScorecardRowData) => void;
+};
+
+function ScorecardRow({ scorecardRowData, onScoreClicked }: ScorecardRowProps) {
+  const { category, markedScore, possibleScore } = scorecardRowData;
+  return (
+    <tr>
+      <td>{category}</td>
+      <td style={{ cursor: "pointer" }}>
+        {markedScore !== undefined ? (
+          markedScore
+        ) : (
+          <span onClick={() => onScoreClicked(scorecardRowData)} style={{ color: "lightgray" }}>
+            {possibleScore}
+          </span>
+        )}
+      </td>
+    </tr>
+  );
 }
 
 export default ScorecardRow;
