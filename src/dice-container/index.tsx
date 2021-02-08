@@ -1,4 +1,4 @@
-import Box from "@material-ui/core/Box";
+import Box, { BoxProps } from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import React from "react";
 import { YahtzeeDice } from "../game";
@@ -8,6 +8,7 @@ import DiceThree from "./images/dice-three.png";
 import DiceFour from "./images/dice-four.png";
 import DiceFive from "./images/dice-five.png";
 import DiceSix from "./images/dice-six.png";
+import { styled } from "@material-ui/core/styles";
 
 type DiceContainerProps = {
   dice: YahtzeeDice[];
@@ -42,28 +43,49 @@ export default function DiceContainer({ dice, canRollDice, onDiceRolled, onDiceC
     onDiceRolled(diceRoll);
   };
 
+  type DicePlaceholderProps = BoxProps & {
+    islocked: boolean;
+  };
+
+  const DicePlaceholder = styled(({ islocked, ...other }) => <Box {...other} />)({
+    background: "##f3f3f3",
+    borderRadius: 3,
+    boxShadow: (props: DicePlaceholderProps) =>
+      `0px 0px 3px 3px rgba${props.islocked ? "(230,0,0,0.20)" : "(0,0,0,0.20)"}`,
+    webkitBoxShadow: "0px 0px 3px 3px rgba(0,0,0,0.20)",
+    mozBoxShadow: "0px 0px 3px 3px rgba(0,0,0,0.20)",
+    width: "60px",
+    height: "60px",
+    margin: "10px",
+  });
+
   return (
     <>
-      <Box display={"flex"}>
+      <Box py={1} display={"flex"}>
         {dice.map((d: YahtzeeDice) => {
           return (
-            <div
+            <DicePlaceholder
               key={d.id}
+              islocked={d.isLocked}
               data-testid={`dice-${d.id}`}
               onClick={() => onDiceClicked(d)}
-              style={{ width: "50px", height: "50px", border: `1px solid ${d.isLocked ? "yellow" : "gray"}` }}
             >
               {d.value ? (
-                <img style={{ width: "50px", height: "50px" }} src={dicePathLookup[d.value]} alt={d.value.toString()} />
-              ) : (
-                "-"
-              )}
-            </div>
+                <img style={{ height: "100%" }} src={dicePathLookup[d.value]} alt={d.value.toString()} />
+              ) : null}
+            </DicePlaceholder>
           );
         })}
       </Box>
-      <Button color="primary" onClick={rollDice} disabled={!canRollDice}>
-        Roll
+      <Button
+        fullWidth
+        size={"large"}
+        color={"primary"}
+        variant={"contained"}
+        onClick={rollDice}
+        disabled={!canRollDice}
+      >
+        <div>Roll</div>
       </Button>
     </>
   );

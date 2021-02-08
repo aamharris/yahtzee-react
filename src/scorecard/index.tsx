@@ -1,8 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { YahtzeeDice } from "../game";
-import { FULL_HOUSE_SCORE, LG_STRAIGHT_SCORE, SM_STRAIGHT_SCORE, YAHTZEE_SCORE } from "../constants";
 import ScorecardRow from "./ScorecardRow";
 import ScorecardCalculator from "./scorecardManager";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableCell from "@material-ui/core/TableCell";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableRow from "@material-ui/core/TableRow";
+import TableFooter from "@material-ui/core/TableFooter";
+import { styled } from "@material-ui/core/styles";
 
 export type YahtzeeScorecard2 = {
   upperSection: ScorecardRowData[];
@@ -39,15 +46,22 @@ function Scorecard({ dice, scorecard, onScorecardChanged, onScoreMarked, canSele
     onScorecardChanged(updatedScorecard);
   }, [dice]);
 
+  const ScorecardTableContainer = styled(TableContainer)({
+    border: 1,
+    borderRadius: 3,
+    borderStyle: "solid",
+    borderColor: "darkgray",
+  });
+
   return (
-    <div>
-      <table style={{ borderCollapse: "collapse" }}>
-        <thead>
-          <tr>
-            <th>Upper Section</th>
-          </tr>
-        </thead>
-        <tbody>
+    <ScorecardTableContainer>
+      <Table size="small">
+        <TableHead>
+          <TableRow>
+            <TableCell colSpan={2}>Upper Section</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
           {scorecard?.upperSection.map((rowData: ScorecardRowData) => {
             return (
               <ScorecardRow
@@ -57,13 +71,13 @@ function Scorecard({ dice, scorecard, onScorecardChanged, onScoreMarked, canSele
               />
             );
           })}
-        </tbody>
-        <thead>
-          <tr>
-            <th>Lower Section</th>
-          </tr>
-        </thead>
-        <tbody>
+        </TableBody>
+        <TableHead>
+          <TableRow>
+            <TableCell colSpan={2}>Lower Section</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
           {scorecard?.lowerSection.map((rowData: ScorecardRowData) => {
             return (
               <ScorecardRow
@@ -73,15 +87,15 @@ function Scorecard({ dice, scorecard, onScorecardChanged, onScoreMarked, canSele
               />
             );
           })}
-        </tbody>
-        <tfoot>
-          <tr>
-            <td>Total Score</td>
-            <td>{scorecard?.totalScore}</td>
-          </tr>
-        </tfoot>
-      </table>
-    </div>
+        </TableBody>
+        <TableFooter>
+          <TableRow>
+            <TableCell>Total Score</TableCell>
+            <TableCell align={"center"}>{scorecard?.totalScore}</TableCell>
+          </TableRow>
+        </TableFooter>
+      </Table>
+    </ScorecardTableContainer>
   );
 }
 

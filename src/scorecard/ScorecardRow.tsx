@@ -1,3 +1,6 @@
+import TableCell from "@material-ui/core/TableCell";
+import TableRow from "@material-ui/core/TableRow";
+import React from "react";
 import { ScorecardRowData } from ".";
 
 type ScorecardRowProps = {
@@ -8,9 +11,9 @@ type ScorecardRowProps = {
 function ScorecardRow({ scorecardRowData, onScoreClicked }: ScorecardRowProps) {
   const { category, markedScore, possibleScore } = scorecardRowData;
   return (
-    <tr role="row">
-      <td>{category}</td>
-      <td style={{ cursor: "pointer" }}>
+    <TableRow>
+      <TableCell>{category}</TableCell>
+      <TableCell align={"center"} style={{ cursor: "pointer" }}>
         {markedScore !== undefined ? (
           markedScore
         ) : (
@@ -18,8 +21,8 @@ function ScorecardRow({ scorecardRowData, onScoreClicked }: ScorecardRowProps) {
             {possibleScore}
           </span>
         )}
-      </td>
-    </tr>
+      </TableCell>
+    </TableRow>
   );
 }
 

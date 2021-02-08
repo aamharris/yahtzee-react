@@ -1,11 +1,14 @@
 import React, { useState } from "react";
-import "./Game.css";
 import DiceContainer from "../dice-container";
 import Scorecard, { YahtzeeScorecard2 } from "../scorecard";
 import { MAX_ROLL_PER_ROUND, MAX_ROUND_COUNT } from "../constants";
 import { createNewScorecard } from "../scorecard/scorecardManager";
 import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
 
 export interface YahtzeeDice {
   id: number;
@@ -54,22 +57,28 @@ function Game() {
   };
 
   return (
-    <Container maxWidth={"sm"}>
+    <Container maxWidth={"xs"}>
+      <Typography variant="h4">Yahtzee</Typography>
       <Box flex justifyContent={"center"}>
         <div>Round {gameRound} / 13</div>
-        <Scorecard
-          dice={dice}
-          scorecard={scorecard}
-          onScoreMarked={setNextRound}
-          onScorecardChanged={onScorecardChanged}
-          canSelectScore={canSelectScore}
-        />
-        <DiceContainer
-          dice={dice}
-          onDiceClicked={onDiceClicked}
-          canRollDice={currentRollCount !== MAX_ROLL_PER_ROUND && !isGameOver}
-          onDiceRolled={onDiceRolled}
-        />
+        <Box py={1}>
+          <Scorecard
+            dice={dice}
+            scorecard={scorecard}
+            onScoreMarked={setNextRound}
+            onScorecardChanged={onScorecardChanged}
+            canSelectScore={canSelectScore}
+          />
+        </Box>
+        <Box>
+          <DiceContainer
+            dice={dice}
+            onDiceClicked={onDiceClicked}
+            canRollDice={currentRollCount !== MAX_ROLL_PER_ROUND && !isGameOver}
+            onDiceRolled={onDiceRolled}
+          />
+        </Box>
+
         {isGameOver && "Game Over!"}
       </Box>
     </Container>

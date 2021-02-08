@@ -1,12 +1,29 @@
+import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import React from "react";
 import ReactDOM from "react-dom";
 import Game from "./game";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: "#8b0000",
+    },
+  },
+});
+
+function App() {
+  return (
+    <ThemeProvider theme={theme}>
+      <Game />
+    </ThemeProvider>
+  );
+}
+
 ReactDOM.render(
   <React.StrictMode>
-    <Game />
+    <App />
   </React.StrictMode>,
   document.getElementById("root")
 );
