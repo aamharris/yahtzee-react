@@ -58,6 +58,7 @@ function Game() {
       <Typography variant="h4">Yahtzee</Typography>
       <Box>
         <div>Round {gameRound} / 13</div>
+
         <Box py={1}>
           <Scorecard
             dice={dice}

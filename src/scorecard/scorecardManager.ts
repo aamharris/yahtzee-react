@@ -1,25 +1,26 @@
 import { ScorecardRowData, YahtzeeScorecard2 } from ".";
 import { FULL_HOUSE_SCORE, LG_STRAIGHT_SCORE, SM_STRAIGHT_SCORE, YAHTZEE_SCORE } from "../constants";
 import { YahtzeeDice } from "../game";
+import ScoringCategories from "./scoringCategories";
 
 export function createNewScorecard(): YahtzeeScorecard2 {
   return {
     upperSection: [
-      { category: "Aces", possibleScore: 0 },
-      { category: "Twos" },
-      { category: "Threes" },
-      { category: "Fours" },
-      { category: "Fives" },
-      { category: "Sixes" },
+      { category: ScoringCategories.aces, possibleScore: 0 },
+      { category: ScoringCategories.twos },
+      { category: ScoringCategories.threes },
+      { category: ScoringCategories.fours },
+      { category: ScoringCategories.fives },
+      { category: ScoringCategories.sixes },
     ],
     lowerSection: [
-      { category: "3 of a Kind" },
-      { category: "4 of a Kind" },
-      { category: "Full House" },
-      { category: "Sm. Straight" },
-      { category: "Lg. Straight" },
-      { category: "Chance" },
-      { category: "YAHTZEE" },
+      { category: ScoringCategories.threeOfAKind },
+      { category: ScoringCategories.fourOfAKind },
+      { category: ScoringCategories.fullHouse },
+      { category: ScoringCategories.smallStraight },
+      { category: ScoringCategories.largeStraight },
+      { category: ScoringCategories.chance },
+      { category: ScoringCategories.yahtzee },
     ],
     totalScore: 0,
   };
