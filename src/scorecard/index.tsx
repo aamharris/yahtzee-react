@@ -41,7 +41,7 @@ function Scorecard({ dice, scorecard, onScorecardChanged, onScoreMarked, canSele
   };
 
   useEffect(() => {
-    console.log("rendering from useEffect");
+    console.log("rendering scorecard from useEffect");
     const updatedScorecard = ScorecardCalculator.calculatePossibleScores(scorecard, dice);
     onScorecardChanged(updatedScorecard);
   }, [dice]);

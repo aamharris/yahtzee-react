@@ -57,7 +57,7 @@ const ScorecardCalculator = {
     let consectiveCount = 0;
     Array.from(this.totalCountOfDiceByValue.keys())
       .sort((a, b) => b - a)
-      .map((currentNumber, idx, arr) => {
+      .forEach((currentNumber, idx, arr) => {
         if (idx !== arr.length && currentNumber - arr[idx + 1] === 1) {
           consectiveCount += 1;
         }
