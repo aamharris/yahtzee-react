@@ -10,6 +10,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableRow from "@material-ui/core/TableRow";
 import TableFooter from "@material-ui/core/TableFooter";
 import { styled } from "@material-ui/core/styles";
+import { Typography } from "@material-ui/core";
 
 export type YahtzeeScorecard2 = {
   upperSection: ScorecardRowData[];
@@ -89,8 +90,10 @@ function Scorecard({ dice, scorecard, onScorecardChanged, onScoreMarked, canSele
           })}
         </TableBody>
         <TableFooter>
-          <TableRow>
-            <TableCell>Total Score</TableCell>
+          <TableRow style={{ borderTop: "2px solid darkgray" }}>
+            <TableCell variant={"head"}>
+              <Typography>Total Score</Typography>
+            </TableCell>
             <TableCell align={"center"}>{scorecard?.totalScore}</TableCell>
           </TableRow>
         </TableFooter>

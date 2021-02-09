@@ -98,7 +98,7 @@ export default function DiceContainer({
           );
         })}
       </DiceBox>
-      <Box display={"flex"} justifyContent={"flex-end"}>
+      <Box display={"flex"} justifyContent={"flex-end"} visibility={currentRoundRollCount > 0 ? "visible" : "hidden"}>
         <Typography variant={"caption"}>{`Roll ${currentRoundRollCount} / ${MAX_ROLL_PER_ROUND}`}</Typography>
       </Box>
       <Button
