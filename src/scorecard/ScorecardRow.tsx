@@ -13,14 +13,12 @@ function ScorecardRow({ scorecardRowData, onScoreClicked }: ScorecardRowProps) {
   return (
     <TableRow>
       <TableCell>{category}</TableCell>
-      <TableCell align={"center"} style={{ cursor: "pointer" }}>
-        {markedScore !== undefined ? (
-          markedScore
-        ) : (
-          <span onClick={() => onScoreClicked(scorecardRowData)} style={{ color: "lightgray" }}>
-            {possibleScore}
-          </span>
-        )}
+      <TableCell
+        align={"center"}
+        onClick={() => onScoreClicked(scorecardRowData)}
+        style={{ cursor: "pointer", width: "25px" }}
+      >
+        {markedScore !== undefined ? markedScore : <span style={{ color: "lightgray" }}>{possibleScore}</span>}
       </TableCell>
     </TableRow>
   );

@@ -6,6 +6,7 @@ import { createNewScorecard } from "../scorecard/scorecardManager";
 import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
 
 export interface YahtzeeDice {
   id: number;
@@ -55,7 +56,10 @@ function Game() {
 
   return (
     <Container maxWidth={"xs"}>
-      <Typography variant="h4">Yahtzee</Typography>
+      <Box py={2} display={"flex"} justifyContent={"space-between"} alignContent={"center"}>
+        <Typography variant="h4">Yahtzee</Typography>
+        <Button variant={"outlined"}>New Game</Button>
+      </Box>
       <Box>
         <div>Round {gameRound} / 13</div>
 
