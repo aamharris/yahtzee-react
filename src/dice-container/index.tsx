@@ -56,7 +56,7 @@ export default function DiceContainer({
     islocked: boolean;
   };
 
-  const DicePlaceholder = styled(({ islocked, ...other }: DicePlaceholderProps) => <Box {...other} />)({
+  const DiceCell = styled(({ islocked, ...other }: DicePlaceholderProps) => <Box {...other} />)({
     background: "#f3f3f3",
     borderRadius: 3,
     boxShadow: (props: DicePlaceholderProps) =>
@@ -73,7 +73,7 @@ export default function DiceContainer({
     },
   });
 
-  const DiceBox = styled(Box)({
+  const DiceGrid = styled(Box)({
     display: "grid",
     gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr",
     gridGap: "2%",
@@ -82,22 +82,17 @@ export default function DiceContainer({
 
   return (
     <>
-      <DiceBox>
+      <DiceGrid>
         {dice.map((d: YahtzeeDice) => {
           return (
-            <DicePlaceholder
-              key={d.id}
-              islocked={d.isLocked}
-              data-testid={`dice-${d.id}`}
-              onClick={() => onDiceClicked(d)}
-            >
+            <DiceCell key={d.id} islocked={d.isLocked} data-testid={`dice-${d.id}`} onClick={() => onDiceClicked(d)}>
               {d.value ? (
                 <img style={{ maxWidth: "100%" }} src={dicePathLookup[d.value]} alt={d.value.toString()} />
               ) : null}
-            </DicePlaceholder>
+            </DiceCell>
           );
         })}
-      </DiceBox>
+      </DiceGrid>
       <Box display={"flex"} justifyContent={"flex-end"} visibility={currentRoundRollCount > 0 ? "visible" : "hidden"}>
         <Typography variant={"caption"}>{`Roll ${currentRoundRollCount} / ${MAX_ROLL_PER_ROUND}`}</Typography>
       </Box>

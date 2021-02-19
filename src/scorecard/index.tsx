@@ -1,7 +1,5 @@
-import React, { useEffect } from "react";
-import { YahtzeeDice } from "../game";
+import React from "react";
 import ScorecardRow from "./ScorecardRow";
-import ScorecardCalculator from "./scorecardManager";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableCell from "@material-ui/core/TableCell";
@@ -11,11 +9,13 @@ import TableRow from "@material-ui/core/TableRow";
 import TableFooter from "@material-ui/core/TableFooter";
 import { styled } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
+import UpperSectionBonusRow from "./UpperBonusRow";
 
 export type YahtzeeScorecard2 = {
   upperSection: ScorecardRowData[];
   lowerSection: ScorecardRowData[];
   totalScore: number;
+  upperSectionBonus: number;
 };
 
 export type ScorecardRowData = {
@@ -26,26 +26,17 @@ export type ScorecardRowData = {
 
 type ScorecardProps = {
   scorecard: YahtzeeScorecard2;
-  dice: YahtzeeDice[];
-  onScorecardChanged: (scorecard: YahtzeeScorecard2) => void;
   onScoreMarked: () => void;
   canSelectScore: boolean;
 };
 
-function Scorecard({ dice, scorecard, onScorecardChanged, onScoreMarked, canSelectScore }: ScorecardProps) {
+function Scorecard({ scorecard, onScoreMarked, canSelectScore }: ScorecardProps) {
   const markSelectedScore = (row: ScorecardRowData): void => {
     if (canSelectScore) {
       row.markedScore = row.possibleScore;
-      onScorecardChanged(scorecard);
       onScoreMarked();
     }
   };
-
-  useEffect(() => {
-    console.log("rendering scorecard from useEffect");
-    const updatedScorecard = ScorecardCalculator.calculatePossibleScores(scorecard, dice);
-    onScorecardChanged(updatedScorecard);
-  }, [dice]);
 
   const ScorecardTableContainer = styled(TableContainer)({
     border: 1,
@@ -72,6 +63,7 @@ function Scorecard({ dice, scorecard, onScorecardChanged, onScoreMarked, canSele
               />
             );
           })}
+          <UpperSectionBonusRow upperSectionBonus={scorecard.upperSectionBonus} />
         </TableBody>
         <TableHead>
           <TableRow>

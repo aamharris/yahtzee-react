@@ -3,25 +3,6 @@ import React from "react";
 import Game from ".";
 
 describe("Game", () => {
-  it("sets initial dice to empty values", () => {
-    render(<Game />);
-    expect(screen.getByTestId("dice-0").innerHTML).toContain("-");
-    expect(screen.getByTestId("dice-1").innerHTML).toContain("-");
-    expect(screen.getByTestId("dice-2").innerHTML).toContain("-");
-    expect(screen.getByTestId("dice-3").innerHTML).toContain("-");
-    expect(screen.getByTestId("dice-4").innerHTML).toContain("-");
-  });
-
-  it("rolls dice when roll dice button is clicked", () => {
-    render(<Game />);
-    fireEvent.click(screen.getByRole("button", { name: "Roll" }));
-    expect(screen.getByTestId("dice-0").innerHTML).toMatch(/^\d$/);
-    expect(screen.getByTestId("dice-1").innerHTML).toMatch(/^\d$/);
-    expect(screen.getByTestId("dice-2").innerHTML).toMatch(/^\d$/);
-    expect(screen.getByTestId("dice-3").innerHTML).toMatch(/^\d$/);
-    expect(screen.getByTestId("dice-4").innerHTML).toMatch(/^\d$/);
-  });
-
   describe("rounds", () => {
     it("sets initial round to 1", () => {
       render(<Game />);

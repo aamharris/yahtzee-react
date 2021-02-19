@@ -1,37 +1,59 @@
 import React from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import DiceContainer from ".";
 import { YahtzeeDice } from "../game";
+import DiceBuilder from "../testUtils/DiceBuilder";
 
 describe("DiceContainer", () => {
   describe("Dice", () => {
     const renderDiceContainer = (dice: YahtzeeDice[]) => {
-      render(<DiceContainer dice={dice} onDiceRolled={jest.fn()} onDiceClicked={jest.fn()} canRollDice={true} />);
+      render(
+        <DiceContainer
+          dice={dice}
+          currentRoundRollCount={1}
+          onDiceRolled={jest.fn()}
+          onDiceClicked={jest.fn()}
+          canRollDice={true}
+        />
+      );
     };
 
-    it("displays all dice values", () => {
-      const dice: YahtzeeDice[] = [
-        { id: 1, value: 1, isLocked: false },
-        { id: 2, value: 2, isLocked: false },
-      ];
+    it("gets the correct dice image for the value", () => {
+      var diceBuilder = new DiceBuilder();
+      for (var i = 1; i <= 6; i++) {
+        diceBuilder.addDice({ value: i, id: i });
+      }
+
+      const dice = diceBuilder.build();
 
       renderDiceContainer(dice);
-      expect(screen.getByText("1")).toBeInTheDocument();
-      expect(screen.getByText("2")).toBeInTheDocument();
+      expect(within(screen.getByTestId("dice-1")).getByAltText("1")).toBeInTheDocument();
+      expect(within(screen.getByTestId("dice-2")).getByAltText("2")).toBeInTheDocument();
+      expect(within(screen.getByTestId("dice-3")).getByAltText("3")).toBeInTheDocument();
+      expect(within(screen.getByTestId("dice-4")).getByAltText("4")).toBeInTheDocument();
+      expect(within(screen.getByTestId("dice-5")).getByAltText("5")).toBeInTheDocument();
+      expect(within(screen.getByTestId("dice-6")).getByAltText("6")).toBeInTheDocument();
     });
 
-    it("displays empty dice value when dice value is undefined", () => {
+    it("does not display dice when dice value is undefined", () => {
       const dice: YahtzeeDice[] = [{ id: 1, value: undefined, isLocked: false }];
 
       renderDiceContainer(dice);
-      expect(screen.getByText("-")).toBeInTheDocument();
+      expect(screen.getByTestId("dice-1")).toBeEmptyDOMElement();
     });
 
-    it("highlights locked dice", () => {
-      const dice: YahtzeeDice[] = [{ id: 1, value: undefined, isLocked: true }];
+    it("highlights locked dice in red", () => {
+      const dice: YahtzeeDice[] = [{ id: 1, value: 1, isLocked: true }];
 
       renderDiceContainer(dice);
-      expect(screen.getByTestId("dice-1")).toHaveStyle("border: 1px solid yellow");
+      expect(screen.getByTestId("dice-1")).toHaveStyle("box-shadow: 0px 0px 3px 3px rgba(230,0,0,0.20)");
+    });
+
+    it("highlights unloced dice in gray", () => {
+      const dice: YahtzeeDice[] = [{ id: 1, value: 1, isLocked: false }];
+
+      renderDiceContainer(dice);
+      expect(screen.getByTestId("dice-1")).toHaveStyle("box-shadow: 0px 0px 3px 3px rgba(0,0,0,0.20)");
     });
   });
 
@@ -43,7 +65,15 @@ describe("DiceContainer", () => {
     };
 
     const renderDiceContainer = (dice: YahtzeeDice): void => {
-      render(<DiceContainer dice={[dice]} onDiceRolled={onRollClicked} onDiceClicked={() => {}} canRollDice={true} />);
+      render(
+        <DiceContainer
+          dice={[dice]}
+          currentRoundRollCount={1}
+          onDiceRolled={onRollClicked}
+          onDiceClicked={() => {}}
+          canRollDice={true}
+        />
+      );
     };
 
     beforeEach(() => {
