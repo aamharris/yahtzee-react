@@ -10,6 +10,7 @@ import TableFooter from "@material-ui/core/TableFooter";
 import { styled } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
 import UpperSectionBonusRow from "./UpperBonusRow";
+import ScoringCategories from "./scoringCategories";
 
 export type YahtzeeScorecard2 = {
   upperSection: ScorecardRowData[];
@@ -19,25 +20,17 @@ export type YahtzeeScorecard2 = {
 };
 
 export type ScorecardRowData = {
-  category: string;
+  category: ScoringCategories;
   possibleScore?: number;
   markedScore?: number;
 };
 
 type ScorecardProps = {
   scorecard: YahtzeeScorecard2;
-  onScoreMarked: () => void;
-  canSelectScore: boolean;
+  onScoreMarked: (row: ScorecardRowData) => void;
 };
 
-function Scorecard({ scorecard, onScoreMarked, canSelectScore }: ScorecardProps) {
-  const markSelectedScore = (row: ScorecardRowData): void => {
-    if (canSelectScore) {
-      row.markedScore = row.possibleScore;
-      onScoreMarked();
-    }
-  };
-
+function Scorecard({ scorecard, onScoreMarked }: ScorecardProps) {
   const ScorecardTableContainer = styled(TableContainer)({
     border: 1,
     borderRadius: 3,
@@ -59,7 +52,7 @@ function Scorecard({ scorecard, onScoreMarked, canSelectScore }: ScorecardProps)
               <ScorecardRow
                 key={rowData.category}
                 scorecardRowData={rowData}
-                onScoreClicked={() => markSelectedScore(rowData)}
+                onScoreClicked={() => onScoreMarked(rowData)}
               />
             );
           })}
@@ -76,7 +69,7 @@ function Scorecard({ scorecard, onScoreMarked, canSelectScore }: ScorecardProps)
               <ScorecardRow
                 key={rowData.category}
                 scorecardRowData={rowData}
-                onScoreClicked={() => markSelectedScore(rowData)}
+                onScoreClicked={() => onScoreMarked(rowData)}
               />
             );
           })}

@@ -5,3 +5,5 @@ export const YAHTZEE_SCORE = 50;
 export const YAHTZEE_BONUS_SCORE = 100;
 export const MAX_ROUND_COUNT = 13;
 export const MAX_ROLL_PER_ROUND = 3;
+export const MIN_UPPER_TOTAL_FOR_BONUS = 63;
+export const UPPER_SECTION_BONUS = 35;

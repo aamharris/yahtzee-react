@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import DiceContainer from "../dice-container";
-import Scorecard, { YahtzeeScorecard2 } from "../scorecard";
-import { MAX_ROLL_PER_ROUND, MAX_ROUND_COUNT } from "../constants";
+import Scorecard, { ScorecardRowData, YahtzeeScorecard2 } from "../scorecard";
+import { MAX_ROLL_PER_ROUND, MAX_ROUND_COUNT, MIN_UPPER_TOTAL_FOR_BONUS, UPPER_SECTION_BONUS } from "../constants";
 import createNewScorecard from "../scorecard/scorecardManager";
 import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import ScorecardCalculator from "./ScorecardCalculator";
+import ScoringCategories from "../scorecard/scoringCategories";
 
 export interface YahtzeeDice {
   id: number;
@@ -41,8 +42,32 @@ function Game() {
     setDice(diceCopy);
   };
 
-  const onScorecardMarked = () => {
+  const isUpperSectionCategory = (category: ScoringCategories): boolean => {
+    return (
+      category === ScoringCategories.aces ||
+      category === ScoringCategories.twos ||
+      category === ScoringCategories.threes ||
+      category === ScoringCategories.fours ||
+      category === ScoringCategories.fives ||
+      category === ScoringCategories.sixes
+    );
+  };
+
+  const hasMinTotalForBonus = (): boolean => {
+    return scorecard.upperSection.reduce((a, b) => a + (b.markedScore as number), 0) >= MIN_UPPER_TOTAL_FOR_BONUS;
+  };
+
+  const onScorecardMarked = (row: ScorecardRowData) => {
+    if (canSelectScore) {
+      row.markedScore = row.possibleScore;
+    }
+
+    if (scorecard.upperSectionBonus === 0 && isUpperSectionCategory(row.category) && hasMinTotalForBonus()) {
+      scorecard.upperSectionBonus = UPPER_SECTION_BONUS;
+    }
+    setScorecard({ ...scorecard });
     setCanSelectScore(false);
+
     if (gameRound === MAX_ROUND_COUNT) {
       setIsGameOver(true);
     } else {
@@ -61,7 +86,7 @@ function Game() {
       <Box>
         <div>Round {gameRound} / 13</div>
         <Box py={1}>
-          <Scorecard scorecard={scorecard} onScoreMarked={onScorecardMarked} canSelectScore={canSelectScore} />
+          <Scorecard scorecard={scorecard} onScoreMarked={onScorecardMarked} />
         </Box>
         <Box>
           <DiceContainer
