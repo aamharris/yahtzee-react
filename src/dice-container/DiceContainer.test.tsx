@@ -1,5 +1,5 @@
 import React from "react";
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import DiceContainer from ".";
 import { YahtzeeDice } from "../game";
 import DiceBuilder from "../testUtils/DiceBuilder";
@@ -7,15 +7,7 @@ import DiceBuilder from "../testUtils/DiceBuilder";
 describe("DiceContainer", () => {
   describe("Dice", () => {
     const renderDiceContainer = (dice: YahtzeeDice[]) => {
-      render(
-        <DiceContainer
-          dice={dice}
-          currentRoundRollCount={1}
-          onDiceRolled={jest.fn()}
-          onDiceClicked={jest.fn()}
-          canRollDice={true}
-        />
-      );
+      render(<DiceContainer dice={dice} onDiceClicked={jest.fn()} />);
     };
 
     it("gets the correct dice image for the value", () => {
@@ -57,51 +49,51 @@ describe("DiceContainer", () => {
     });
   });
 
-  describe("roll dice", () => {
-    const onRollClicked = jest.fn();
+  // describe("roll dice", () => {
+  //   const onRollClicked = jest.fn();
 
-    const createDiceWithValue = (value: number | undefined, isLocked: boolean = false): YahtzeeDice => {
-      return { id: 1, value: value, isLocked: isLocked };
-    };
+  //   const createDiceWithValue = (value: number | undefined, isLocked: boolean = false): YahtzeeDice => {
+  //     return { id: 1, value: value, isLocked: isLocked };
+  //   };
 
-    const renderDiceContainer = (dice: YahtzeeDice): void => {
-      render(
-        <DiceContainer
-          dice={[dice]}
-          currentRoundRollCount={1}
-          onDiceRolled={onRollClicked}
-          onDiceClicked={() => {}}
-          canRollDice={true}
-        />
-      );
-    };
+  //   const renderDiceContainer = (dice: YahtzeeDice): void => {
+  //     render(
+  //       <DiceContainer
+  //         dice={[dice]}
+  //         currentRoundRollCount={1}
+  //         onDiceRolled={onRollClicked}
+  //         onDiceClicked={() => {}}
+  //         canRollDice={true}
+  //       />
+  //     );
+  //   };
 
-    beforeEach(() => {
-      jest.resetAllMocks();
-    });
+  //   beforeEach(() => {
+  //     jest.resetAllMocks();
+  //   });
 
-    it("rolls a 1 when math.random is 0", async () => {
-      let dice = createDiceWithValue(undefined);
-      jest.spyOn(global.Math, "random").mockReturnValue(0.0);
-      renderDiceContainer(dice);
-      fireEvent.click(screen.getByRole("button", { name: "Roll" }));
-      expect(onRollClicked).toBeCalledWith([{ ...dice, value: 1 }]);
-    });
+  //   it("rolls a 1 when math.random is 0", async () => {
+  //     let dice = createDiceWithValue(undefined);
+  //     jest.spyOn(global.Math, "random").mockReturnValue(0.0);
+  //     renderDiceContainer(dice);
+  //     fireEvent.click(screen.getByRole("button", { name: "Roll" }));
+  //     expect(onRollClicked).toBeCalledWith([{ ...dice, value: 1 }]);
+  //   });
 
-    it("rolls a 6 when math.random is 0.9", async () => {
-      let dice = createDiceWithValue(undefined);
-      jest.spyOn(global.Math, "random").mockReturnValue(0.9);
-      renderDiceContainer(dice);
-      fireEvent.click(screen.getByRole("button", { name: "Roll" }));
-      expect(onRollClicked).toBeCalledWith([{ ...dice, value: 6 }]);
-    });
+  //   it("rolls a 6 when math.random is 0.9", async () => {
+  //     let dice = createDiceWithValue(undefined);
+  //     jest.spyOn(global.Math, "random").mockReturnValue(0.9);
+  //     renderDiceContainer(dice);
+  //     fireEvent.click(screen.getByRole("button", { name: "Roll" }));
+  //     expect(onRollClicked).toBeCalledWith([{ ...dice, value: 6 }]);
+  //   });
 
-    it("does not roll dice if dice is locked", () => {
-      let dice = createDiceWithValue(2, true);
-      jest.spyOn(global.Math, "random").mockReturnValue(0.0);
-      renderDiceContainer(dice);
-      fireEvent.click(screen.getByRole("button", { name: "Roll" }));
-      expect(onRollClicked).toBeCalledWith([{ ...dice, value: 2 }]);
-    });
-  });
+  //   it("does not roll dice if dice is locked", () => {
+  //     let dice = createDiceWithValue(2, true);
+  //     jest.spyOn(global.Math, "random").mockReturnValue(0.0);
+  //     renderDiceContainer(dice);
+  //     fireEvent.click(screen.getByRole("button", { name: "Roll" }));
+  //     expect(onRollClicked).toBeCalledWith([{ ...dice, value: 2 }]);
+  //   });
+  // });
 });

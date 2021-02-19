@@ -8,10 +8,10 @@ describe("Scorecard", () => {
   const defaultScorecard = createNewScorecard();
 
   const renderScorecard = (scorecard: YahtzeeScorecard2) => {
-    render(<Scorecard onScoreMarked={jest.fn} canSelectScore={true} scorecard={scorecard} />);
+    render(<Scorecard onScoreMarked={jest.fn} scorecard={scorecard} />);
   };
 
-  it("displays the upper scorecard with scores ", () => {
+  it("displays the upper scorecard with scores", () => {
     const scorecard = {
       ...defaultScorecard,
       upperSection: [

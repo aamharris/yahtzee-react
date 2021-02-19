@@ -1,9 +1,5 @@
 import Box, { BoxProps } from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
-import React from "react";
 import { YahtzeeDice } from "../game";
-import { MAX_ROLL_PER_ROUND } from "../constants";
-import Typography from "@material-ui/core/Typography";
 import DiceAce from "./images/dice-ace.png";
 import DiceTwo from "./images/dice-two.png";
 import DiceThree from "./images/dice-three.png";
@@ -14,9 +10,6 @@ import { styled } from "@material-ui/core/styles";
 
 type DiceContainerProps = {
   dice: YahtzeeDice[];
-  canRollDice: boolean;
-  currentRoundRollCount: number;
-  onDiceRolled: (dice: YahtzeeDice[]) => void;
   onDiceClicked: (selectedDice: YahtzeeDice) => void;
 };
 
@@ -33,25 +26,7 @@ const dicePathLookup: NumberToDicePathMap = {
   6: DiceSix,
 };
 
-export default function DiceContainer({
-  dice,
-  canRollDice,
-  currentRoundRollCount,
-  onDiceRolled,
-  onDiceClicked,
-}: DiceContainerProps) {
-  const rollDice = (): void => {
-    const diceRoll: YahtzeeDice[] = dice.map((d) => {
-      if (!d.isLocked) {
-        d.value = Math.floor(Math.random() * 6 + 1);
-      }
-
-      return d;
-    });
-
-    onDiceRolled(diceRoll);
-  };
-
+export default function DiceContainer({ dice, onDiceClicked }: DiceContainerProps) {
   type DicePlaceholderProps = BoxProps & {
     islocked: boolean;
   };
@@ -81,31 +56,16 @@ export default function DiceContainer({
   });
 
   return (
-    <>
-      <DiceGrid>
-        {dice.map((d: YahtzeeDice) => {
-          return (
-            <DiceCell key={d.id} islocked={d.isLocked} data-testid={`dice-${d.id}`} onClick={() => onDiceClicked(d)}>
-              {d.value ? (
-                <img style={{ maxWidth: "100%" }} src={dicePathLookup[d.value]} alt={d.value.toString()} />
-              ) : null}
-            </DiceCell>
-          );
-        })}
-      </DiceGrid>
-      <Box display={"flex"} justifyContent={"flex-end"} visibility={currentRoundRollCount > 0 ? "visible" : "hidden"}>
-        <Typography variant={"caption"}>{`Roll ${currentRoundRollCount} / ${MAX_ROLL_PER_ROUND}`}</Typography>
-      </Box>
-      <Button
-        fullWidth
-        size={"large"}
-        color={"primary"}
-        variant={"contained"}
-        onClick={rollDice}
-        disabled={!canRollDice}
-      >
-        {"Roll"}
-      </Button>
-    </>
+    <DiceGrid>
+      {dice.map((d: YahtzeeDice) => {
+        return (
+          <DiceCell key={d.id} islocked={d.isLocked} data-testid={`dice-${d.id}`} onClick={() => onDiceClicked(d)}>
+            {d.value ? (
+              <img style={{ maxWidth: "100%" }} src={dicePathLookup[d.value]} alt={d.value.toString()} />
+            ) : null}
+          </DiceCell>
+        );
+      })}
+    </DiceGrid>
   );
 }

@@ -9,6 +9,7 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import ScorecardCalculator from "./ScorecardCalculator";
 import ScoringCategories from "../scorecard/scoringCategories";
+import RollContainer from "../roll-container";
 
 export interface YahtzeeDice {
   id: number;
@@ -29,8 +30,15 @@ function Game() {
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
   const [canSelectScore, setCanSelectScore] = useState<boolean>(false);
 
-  function onDiceRolled(dice: YahtzeeDice[]) {
-    setDice([...dice]);
+  function onRollClicked() {
+    let diceCopy = [...dice];
+    diceCopy.map((d) => {
+      if (!d.isLocked) {
+        d.value = Math.floor(Math.random() * 6 + 1);
+      }
+      return d;
+    });
+    setDice(diceCopy);
     setCurrentRollCount(currentRollCount + 1);
     setCanSelectScore(true);
     setScorecard(ScorecardCalculator.calculatePossibleScores(scorecard, dice));
@@ -89,12 +97,11 @@ function Game() {
           <Scorecard scorecard={scorecard} onScoreMarked={onScorecardMarked} />
         </Box>
         <Box>
-          <DiceContainer
-            dice={dice}
-            onDiceClicked={onDiceClicked}
+          <DiceContainer dice={dice} onDiceClicked={onDiceClicked} />
+          <RollContainer
+            currentRollCount={currentRollCount}
             canRollDice={currentRollCount !== MAX_ROLL_PER_ROUND && !isGameOver}
-            currentRoundRollCount={currentRollCount}
-            onDiceRolled={onDiceRolled}
+            onRollClicked={() => onRollClicked()}
           />
         </Box>
 
