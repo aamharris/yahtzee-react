@@ -10,6 +10,7 @@ import Button from "@material-ui/core/Button";
 import ScorecardCalculator from "./ScorecardCalculator";
 import ScoringCategories from "../scorecard/scoringCategories";
 import RollContainer from "../roll-container";
+import { DiceService } from "../dice-service";
 
 export interface YahtzeeDice {
   id: number;
@@ -31,17 +32,11 @@ function Game() {
   const [canSelectScore, setCanSelectScore] = useState<boolean>(false);
 
   function onRollClicked() {
-    let diceCopy = [...dice];
-    diceCopy.map((d) => {
-      if (!d.isLocked) {
-        d.value = Math.floor(Math.random() * 6 + 1);
-      }
-      return d;
-    });
-    setDice(diceCopy);
+    const rolledDice = DiceService.roll(dice);
+    setDice(rolledDice);
     setCurrentRollCount(currentRollCount + 1);
     setCanSelectScore(true);
-    setScorecard(ScorecardCalculator.calculatePossibleScores(scorecard, dice));
+    setScorecard(ScorecardCalculator.calculatePossibleScores(scorecard, rolledDice));
   }
 
   const onDiceClicked = (selectedDice: YahtzeeDice) => {
@@ -62,7 +57,10 @@ function Game() {
   };
 
   const hasMinTotalForBonus = (): boolean => {
-    return scorecard.upperSection.reduce((a, b) => a + (b.markedScore as number), 0) >= MIN_UPPER_TOTAL_FOR_BONUS;
+    return (
+      scorecard.upperSection.reduce((a, b) => a + (b.markedScore !== undefined ? b.markedScore : 0), 0) >=
+      MIN_UPPER_TOTAL_FOR_BONUS
+    );
   };
 
   const onScorecardMarked = (row: ScorecardRowData) => {

@@ -10,7 +10,7 @@ function UpperSectionBonusRow({ upperSectionBonus }: UpperSectionBonusRowProps) 
   return (
     <TableRow>
       <TableCell>{"Upper Section Bonus"}</TableCell>
-      <TableCell align={"center"}>{upperSectionBonus !== 0 ? upperSectionBonus : "-"}</TableCell>
+      <TableCell align={"center"}>{upperSectionBonus !== 0 ? upperSectionBonus : ""}</TableCell>
     </TableRow>
   );
 }
