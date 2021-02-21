@@ -11,6 +11,7 @@ import ScorecardCalculator from "./ScorecardCalculator";
 import ScoringCategories from "../scorecard/scoringCategories";
 import RollContainer from "../roll-container";
 import { DiceService } from "../dice-service";
+import GameOverDialog from "../dialogs/GameOver";
 
 export interface YahtzeeDice {
   id: number;
@@ -30,6 +31,7 @@ function Game() {
   const [currentRollCount, setCurrentRollCount] = useState<number>(0);
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
   const [canSelectScore, setCanSelectScore] = useState<boolean>(false);
+  const [gameOverDialogOpen, setGameOverDialogOpen] = useState<boolean>(false);
 
   function onRollClicked() {
     const rolledDice = DiceService.roll(dice);
@@ -56,6 +58,23 @@ function Game() {
     );
   };
 
+  const startNewGame = (): void => {
+    setGameOverDialogOpen(false);
+    setScorecard(createNewScorecard());
+    setGameRound(1);
+    setCurrentRollCount(0);
+    setIsGameOver(false);
+    setDice(initDice);
+    setCanSelectScore(false);
+  };
+
+  const updateHighScore = (): void => {
+    const prevHighScore = localStorage.getItem("highScore");
+    if (!prevHighScore || parseInt(prevHighScore) < scorecard.totalScore) {
+      localStorage.setItem("highScore", scorecard.totalScore.toString());
+    }
+  };
+
   const hasMinTotalForBonus = (): boolean => {
     return (
       scorecard.upperSection.reduce((a, b) => a + (b.markedScore !== undefined ? b.markedScore : 0), 0) >=
@@ -79,6 +98,8 @@ function Game() {
 
     if (gameRound === MAX_ROUND_COUNT) {
       setIsGameOver(true);
+      updateHighScore();
+      setGameOverDialogOpen(true);
     } else {
       setCurrentRollCount(0);
       setGameRound(gameRound + 1);
@@ -87,28 +108,34 @@ function Game() {
   };
 
   return (
-    <Container maxWidth={"xs"}>
-      <Box py={2} display={"flex"} justifyContent={"space-between"} alignContent={"center"}>
-        <Typography variant="h4">Yahtzee</Typography>
-        <Button variant={"outlined"}>New Game</Button>
-      </Box>
-      <Box>
-        <div>Round {gameRound} / 13</div>
-        <Box py={1}>
-          <Scorecard scorecard={scorecard} onScoreMarked={onScorecardMarked} />
+    <>
+      <Container maxWidth={"xs"}>
+        <Box py={2} display={"flex"} justifyContent={"space-between"} alignContent={"center"}>
+          <Typography variant="h4">Yahtzee</Typography>
+          <Button variant={"outlined"} onClick={startNewGame}>
+            New Game
+          </Button>
         </Box>
         <Box>
-          <DiceContainer dice={dice} onDiceClicked={onDiceClicked} />
-          <RollContainer
-            currentRollCount={currentRollCount}
-            canRollDice={currentRollCount !== MAX_ROLL_PER_ROUND && !isGameOver}
-            onRollClicked={() => onRollClicked()}
-          />
-        </Box>
+          <div>High Score: {localStorage.getItem("highScore") ?? 0}</div>
+          <div>Round {gameRound} / 13</div>
+          <Box py={1}>
+            <Scorecard scorecard={scorecard} onScoreMarked={onScorecardMarked} />
+          </Box>
+          <Box>
+            <DiceContainer dice={dice} onDiceClicked={onDiceClicked} />
+            <RollContainer
+              currentRollCount={currentRollCount}
+              canRollDice={currentRollCount !== MAX_ROLL_PER_ROUND && !isGameOver}
+              onRollClicked={() => onRollClicked()}
+            />
+          </Box>
 
-        {isGameOver && "Game Over!"}
-      </Box>
-    </Container>
+          {isGameOver && "Game Over!"}
+        </Box>
+      </Container>
+      <GameOverDialog open={gameOverDialogOpen} totalScore={scorecard.totalScore} onClose={startNewGame} />
+    </>
   );
 }
 
