@@ -46,7 +46,7 @@ const ScorecardCalculator = {
   calculatePossibleScores(scorecard: YahtzeeScorecard2, dice: YahtzeeDice[]): YahtzeeScorecard2 {
     let scorecardCopy = { ...scorecard };
     this.totalCountOfDiceByValue = new Map<number, number>();
-    let totalScore = 0;
+
     dice.forEach((d) => {
       if (d.value) {
         if (this.totalCountOfDiceByValue.has(d.value)) {
@@ -60,8 +60,6 @@ const ScorecardCalculator = {
     scorecardCopy.upperSection.forEach((row: ScorecardRowData, i: number) => {
       if (row.markedScore === undefined) {
         row.possibleScore = this.getSumOfDiceWithTheNumber(i + 1);
-      } else {
-        totalScore += row.markedScore;
       }
     });
 
@@ -83,12 +81,9 @@ const ScorecardCalculator = {
         } else {
           row.possibleScore = this.hasNumberOfSameDice(5) ? YAHTZEE_SCORE : 0;
         }
-      } else {
-        totalScore += row.markedScore;
       }
     });
 
-    scorecardCopy.totalScore = totalScore;
     return scorecardCopy;
   },
 };

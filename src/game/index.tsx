@@ -66,11 +66,14 @@ function Game() {
   const onScorecardMarked = (row: ScorecardRowData) => {
     if (canSelectScore) {
       row.markedScore = row.possibleScore;
+      scorecard.totalScore += row.markedScore as number;
     }
 
     if (scorecard.upperSectionBonus === 0 && isUpperSectionCategory(row.category) && hasMinTotalForBonus()) {
       scorecard.upperSectionBonus = UPPER_SECTION_BONUS;
+      scorecard.totalScore += scorecard.upperSectionBonus;
     }
+
     setScorecard({ ...scorecard });
     setCanSelectScore(false);
 

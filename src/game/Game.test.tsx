@@ -55,6 +55,14 @@ describe("Game", () => {
     expect(screen.getByText("Roll 1 / 3")).toBeInTheDocument();
   });
 
+  it("calculates total score when score is selected", () => {
+    mockRoll.mockReturnValue([{ id: 0, value: 1, isLocked: false }]);
+    render(<Game />);
+    fireEvent.click(screen.getByRole("button", { name: "Roll" }));
+    fireEvent.click(within(screen.getByRole("row", { name: /Aces/ })).getByText("1"));
+    expect(screen.getByRole("row", { name: "Total Score 1" })).toBeInTheDocument();
+  });
+
   describe("Possible scores from roll", () => {
     it("sets possible score for aces", () => {
       mockRoll.mockReturnValue([
