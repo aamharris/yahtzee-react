@@ -117,8 +117,10 @@ function Game() {
           </Button>
         </Box>
         <Box>
-          <div>High Score: {localStorage.getItem("highScore") ?? 0}</div>
-          <div>Round {gameRound} / 13</div>
+          <Box display={"flex"} justifyContent={"space-between"}>
+            <div>Round {gameRound} / 13</div>
+            <div>High Score: {localStorage.getItem("highScore") ?? 0}</div>
+          </Box>
           <Box py={1}>
             <Scorecard scorecard={scorecard} onScoreMarked={onScorecardMarked} />
           </Box>

@@ -11,6 +11,13 @@ const theme = createMuiTheme({
       main: "#8b0000",
     },
   },
+  overrides: {
+    MuiTableCell: {
+      root: {
+        padding: "2px 8px",
+      },
+    },
+  },
 });
 
 function App() {

@@ -40,7 +40,7 @@ function Scorecard({ scorecard, onScoreMarked }: ScorecardProps) {
 
   return (
     <ScorecardTableContainer>
-      <Table size="small">
+      <Table>
         <TableHead>
           <TableRow>
             <TableCell colSpan={2}>Upper Section</TableCell>
