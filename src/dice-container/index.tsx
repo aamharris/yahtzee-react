@@ -60,9 +60,7 @@ export default function DiceContainer({ dice, onDiceClicked }: DiceContainerProp
       {dice.map((d: YahtzeeDice) => {
         return (
           <DiceCell key={d.id} islocked={d.isLocked} data-testid={`dice-${d.id}`} onClick={() => onDiceClicked(d)}>
-            {d.value ? (
-              <img style={{ maxWidth: "100%" }} src={dicePathLookup[d.value]} alt={d.value.toString()} />
-            ) : null}
+            {d.value ? <img style={{ width: "100%" }} src={dicePathLookup[d.value]} alt={d.value.toString()} /> : null}
           </DiceCell>
         );
       })}
