@@ -28,7 +28,7 @@ describe("Game", () => {
   it("initializes with empty scorecard", () => {
     render(<Game />);
     for (const category of Object.values(ScoringCategories)) {
-      expect(screen.getByRole("row", { name: category })).toBeInTheDocument();
+      expect(screen.getByRole("cell", { name: category })).toBeInTheDocument();
     }
   });
 
@@ -41,7 +41,7 @@ describe("Game", () => {
     mockRoll.mockReturnValue([{ id: 0, value: 1, isLocked: false }]);
     render(<Game />);
     fireEvent.click(screen.getByRole("button", { name: "Roll" }));
-    fireEvent.click(within(screen.getByRole("row", { name: /Aces/ })).getByText(/^\d$/));
+    fireEvent.click(within(screen.getByRole("cell", { name: /Aces/ })).getByText(/^\d$/));
     fireEvent.click(screen.getByRole("button", { name: "Roll" }));
     expect(screen.getByText("Round 2 / 13")).toBeInTheDocument();
   });
@@ -50,7 +50,7 @@ describe("Game", () => {
     mockRoll.mockReturnValue([{ id: 0, value: 1, isLocked: false }]);
     render(<Game />);
     fireEvent.click(screen.getByRole("button", { name: "Roll" }));
-    fireEvent.click(within(screen.getByRole("row", { name: /Aces/ })).getByText(/^\d$/));
+    fireEvent.click(within(screen.getByRole("cell", { name: /Aces/ })).getByText(/^\d$/));
     fireEvent.click(screen.getByRole("button", { name: "Roll" }));
     expect(screen.getByText("Roll 1 / 3")).toBeInTheDocument();
   });
@@ -59,7 +59,7 @@ describe("Game", () => {
     mockRoll.mockReturnValue([{ id: 0, value: 1, isLocked: false }]);
     render(<Game />);
     fireEvent.click(screen.getByRole("button", { name: "Roll" }));
-    fireEvent.click(within(screen.getByRole("row", { name: /Aces/ })).getByText("1"));
+    fireEvent.click(within(screen.getByRole("cell", { name: /Aces/ })).getByText("1"));
     expect(screen.getByRole("row", { name: "Total Score 1" })).toBeInTheDocument();
   });
 
@@ -74,7 +74,7 @@ describe("Game", () => {
       render(<Game />);
       fireEvent.click(screen.getByRole("button", { name: "Roll" }));
 
-      expect(screen.getByRole("row", { name: "Aces 2" })).toBeInTheDocument();
+      expect(screen.getByRole("cell", { name: "Aces 2" })).toBeInTheDocument();
     });
 
     it("sets possible score for twos", () => {
@@ -87,7 +87,7 @@ describe("Game", () => {
       render(<Game />);
       fireEvent.click(screen.getByRole("button", { name: "Roll" }));
 
-      expect(screen.getByRole("row", { name: "Twos 4" })).toBeInTheDocument();
+      expect(screen.getByRole("cell", { name: "Twos 4" })).toBeInTheDocument();
     });
 
     it("sets possible score for threes", () => {
@@ -100,7 +100,7 @@ describe("Game", () => {
       render(<Game />);
       fireEvent.click(screen.getByRole("button", { name: "Roll" }));
 
-      expect(screen.getByRole("row", { name: "Threes 6" })).toBeInTheDocument();
+      expect(screen.getByRole("cell", { name: "Threes 6" })).toBeInTheDocument();
     });
 
     it("sets possible score for fours", () => {
@@ -113,7 +113,7 @@ describe("Game", () => {
       render(<Game />);
       fireEvent.click(screen.getByRole("button", { name: "Roll" }));
 
-      expect(screen.getByRole("row", { name: "Fours 8" })).toBeInTheDocument();
+      expect(screen.getByRole("cell", { name: "Fours 8" })).toBeInTheDocument();
     });
 
     it("sets possible score for fives", () => {
@@ -126,7 +126,7 @@ describe("Game", () => {
       render(<Game />);
       fireEvent.click(screen.getByRole("button", { name: "Roll" }));
 
-      expect(screen.getByRole("row", { name: "Fives 10" })).toBeInTheDocument();
+      expect(screen.getByRole("cell", { name: "Fives 10" })).toBeInTheDocument();
     });
 
     it("sets possible score for sixes", () => {
@@ -139,7 +139,7 @@ describe("Game", () => {
       render(<Game />);
       fireEvent.click(screen.getByRole("button", { name: "Roll" }));
 
-      expect(screen.getByRole("row", { name: "Sixes 12" })).toBeInTheDocument();
+      expect(screen.getByRole("cell", { name: "Sixes 12" })).toBeInTheDocument();
     });
 
     it("adds upper score bonus when upper card has over 63 points", () => {
@@ -147,22 +147,22 @@ describe("Game", () => {
       mockRoll.mockReturnValue(thirtyPoints);
       render(<Game />);
 
-      expect(screen.getByRole("row", { name: "Upper Section Bonus" })).toBeInTheDocument();
+      expect(screen.getByRole("cell", { name: "Upper Bonus —" })).toBeInTheDocument();
 
       fireEvent.click(screen.getByRole("button", { name: "Roll" }));
-      fireEvent.click(within(screen.getByRole("row", { name: /Sixes/ })).getByText(30));
+      fireEvent.click(within(screen.getByRole("cell", { name: /Sixes/ })).getByText(30));
 
       const twentyFivePoints = new DiceBuilder().addDice({ value: 5 }, 5).build();
       mockRoll.mockReturnValue(twentyFivePoints);
       fireEvent.click(screen.getByRole("button", { name: "Roll" }));
-      fireEvent.click(within(screen.getByRole("row", { name: /Fives/ })).getByText(25));
+      fireEvent.click(within(screen.getByRole("cell", { name: /Fives/ })).getByText(25));
 
       const eightPoints = new DiceBuilder().addDice({ value: 4 }, 2).build();
       mockRoll.mockReturnValue(eightPoints);
       fireEvent.click(screen.getByRole("button", { name: "Roll" }));
-      fireEvent.click(within(screen.getByRole("row", { name: /Fours/ })).getByText(8));
+      fireEvent.click(within(screen.getByRole("cell", { name: /Fours/ })).getByText(8));
 
-      expect(screen.getByRole("row", { name: `Upper Section Bonus ${UPPER_SECTION_BONUS}` })).toBeInTheDocument();
+      expect(screen.getByRole("cell", { name: `Upper Bonus ${UPPER_SECTION_BONUS}` })).toBeInTheDocument();
     });
 
     it("calculates total when full house", () => {
@@ -172,7 +172,7 @@ describe("Game", () => {
       fireEvent.click(screen.getByRole("button", { name: "Roll" }));
 
       expect(
-        screen.getByRole("row", { name: `${ScoringCategories.fullHouse} ${FULL_HOUSE_SCORE}` })
+        screen.getByRole("cell", { name: `${ScoringCategories.fullHouse} ${FULL_HOUSE_SCORE}` })
       ).toBeInTheDocument();
     });
 
@@ -186,7 +186,7 @@ describe("Game", () => {
       render(<Game />);
       fireEvent.click(screen.getByRole("button", { name: "Roll" }));
 
-      expect(within(screen.getByRole("row", { name: /3 of a Kind/i })).getByText(14)).toBeInTheDocument();
+      expect(within(screen.getByRole("cell", { name: /3 of a Kind/i })).getByText(14)).toBeInTheDocument();
     });
 
     it("shows total for four of a kind when rolled", () => {
@@ -195,7 +195,7 @@ describe("Game", () => {
       render(<Game />);
       fireEvent.click(screen.getByRole("button", { name: "Roll" }));
 
-      expect(within(screen.getByRole("row", { name: /4 of a Kind/i })).getByText(16)).toBeInTheDocument();
+      expect(within(screen.getByRole("cell", { name: /4 of a Kind/i })).getByText(16)).toBeInTheDocument();
     });
 
     it("shows yahtzee score when yahtzee is rolled", () => {
@@ -204,7 +204,7 @@ describe("Game", () => {
       render(<Game />);
       fireEvent.click(screen.getByRole("button", { name: "Roll" }));
 
-      expect(screen.getByRole("row", { name: `YAHTZEE ${YAHTZEE_SCORE}` })).toBeInTheDocument();
+      expect(screen.getByRole("cell", { name: `YAHTZEE ${YAHTZEE_SCORE}` })).toBeInTheDocument();
     });
 
     it("shows total for lg straight when lg straight is rolled", () => {
@@ -221,7 +221,7 @@ describe("Game", () => {
       fireEvent.click(screen.getByRole("button", { name: "Roll" }));
 
       expect(
-        within(screen.getByRole("row", { name: /Lg. Straight/i })).getByText(LG_STRAIGHT_SCORE)
+        within(screen.getByRole("cell", { name: /Lg. Straight/i })).getByText(LG_STRAIGHT_SCORE)
       ).toBeInTheDocument();
     });
 
@@ -239,7 +239,7 @@ describe("Game", () => {
       fireEvent.click(screen.getByRole("button", { name: "Roll" }));
 
       expect(
-        within(screen.getByRole("row", { name: /Sm. Straight/ })).getByText(SM_STRAIGHT_SCORE)
+        within(screen.getByRole("cell", { name: /Sm. Straight/ })).getByText(SM_STRAIGHT_SCORE)
       ).toBeInTheDocument();
     });
 
@@ -257,7 +257,7 @@ describe("Game", () => {
       fireEvent.click(screen.getByRole("button", { name: "Roll" }));
 
       expect(
-        within(screen.getByRole("row", { name: /Sm. Straight/i })).getByText(SM_STRAIGHT_SCORE)
+        within(screen.getByRole("cell", { name: /Sm. Straight/i })).getByText(SM_STRAIGHT_SCORE)
       ).toBeInTheDocument();
     });
 
@@ -267,7 +267,7 @@ describe("Game", () => {
       render(<Game />);
       fireEvent.click(screen.getByRole("button", { name: "Roll" }));
 
-      expect(screen.getByRole("row", { name: "Chance 11" })).toBeInTheDocument();
+      expect(screen.getByRole("cell", { name: "Chance 11" })).toBeInTheDocument();
     });
   });
 });
