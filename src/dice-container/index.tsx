@@ -41,7 +41,6 @@ export default function DiceContainer({ dice, onDiceClicked }: DiceContainerProp
     display: "flex",
     "&::before": {
       content: '""',
-      display: "block",
       width: "0",
       height: "0",
       paddingBottom: "100%",
@@ -51,6 +50,7 @@ export default function DiceContainer({ dice, onDiceClicked }: DiceContainerProp
   const DiceGrid = styled(Box)({
     display: "grid",
     gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr",
+    gridTemplateRows: "min-content",
     gridGap: "2%",
     padding: "10px 0",
   });
@@ -60,7 +60,13 @@ export default function DiceContainer({ dice, onDiceClicked }: DiceContainerProp
       {dice.map((d: YahtzeeDice) => {
         return (
           <DiceCell key={d.id} islocked={d.isLocked} data-testid={`dice-${d.id}`} onClick={() => onDiceClicked(d)}>
-            {d.value ? <img style={{ width: "100%" }} src={dicePathLookup[d.value]} alt={d.value.toString()} /> : null}
+            {d.value ? (
+              <img
+                style={{ height: "100%", width: "100%", objectFit: "contain" }}
+                src={dicePathLookup[d.value]}
+                alt={d.value.toString()}
+              />
+            ) : null}
           </DiceCell>
         );
       })}

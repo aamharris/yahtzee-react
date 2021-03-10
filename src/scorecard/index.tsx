@@ -53,7 +53,7 @@ function Scorecard({ scorecard, onScoreMarked }: ScorecardProps) {
             <TableCell width={"50%"} style={{ borderRight: "1px solid lightgray" }}>
               Upper Section
             </TableCell>
-            <TableCell>LowerSection</TableCell>
+            <TableCell>Lower Section</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
