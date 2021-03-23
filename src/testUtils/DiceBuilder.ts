@@ -1,4 +1,4 @@
-import { YahtzeeDice } from "../game";
+import { YahtzeeDice } from "../shared/types/yahtzeeDice";
 
 export default class DiceBuilder {
   dice: YahtzeeDice[];

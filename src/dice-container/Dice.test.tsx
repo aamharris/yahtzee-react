@@ -1,12 +1,12 @@
 import React from "react";
 import { render, screen, within } from "@testing-library/react";
-import DiceContainer from ".";
-import { YahtzeeDice } from "../game";
+import Dice from "./Dice";
 import DiceBuilder from "../testUtils/DiceBuilder";
+import { YahtzeeDice } from "../shared/types/yahtzeeDice";
 
-describe("DiceContainer", () => {
+describe("Dice", () => {
   const renderDiceContainer = (dice: YahtzeeDice[]) => {
-    render(<DiceContainer dice={dice} onDiceClicked={jest.fn()} />);
+    render(<Dice dice={dice} onDiceClicked={jest.fn()} />);
   };
 
   it("gets the correct dice image for the value", () => {
@@ -33,17 +33,17 @@ describe("DiceContainer", () => {
     expect(screen.getByTestId("dice-1")).toBeEmptyDOMElement();
   });
 
-  it("highlights locked dice in red", () => {
+  it("adds locked class when dice is locked", () => {
     const dice: YahtzeeDice[] = [{ id: 1, value: 1, isLocked: true }];
 
     renderDiceContainer(dice);
-    expect(screen.getByTestId("dice-1")).toHaveStyle("box-shadow: 0px 0px 3px 3px rgba(230,0,0,0.20)");
+    expect(screen.getByTestId("dice-1")).toHaveClass("locked");
   });
 
-  it("highlights unloced dice in gray", () => {
+  it("does not have locked style class when dice is not locked", () => {
     const dice: YahtzeeDice[] = [{ id: 1, value: 1, isLocked: false }];
 
     renderDiceContainer(dice);
-    expect(screen.getByTestId("dice-1")).toHaveStyle("box-shadow: 0px 0px 3px 3px rgba(0,0,0,0.20)");
+    expect(screen.getByTestId("dice-1")).not.toHaveClass("locked");
   });
 });

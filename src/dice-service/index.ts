@@ -1,4 +1,4 @@
-import { YahtzeeDice } from "../game";
+import { YahtzeeDice } from "../shared/types/yahtzeeDice";
 
 export const DiceService = {
   roll(dice: YahtzeeDice[]): YahtzeeDice[] {

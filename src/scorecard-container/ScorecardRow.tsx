@@ -1,9 +1,8 @@
+import React from "react";
 import Box from "@material-ui/core/Box";
 import { styled } from "@material-ui/core/styles";
 import TableCell from "@material-ui/core/TableCell";
-import { findByLabelText } from "@testing-library/react";
-import React from "react";
-import { ScorecardRowData } from ".";
+import { ScorecardRowData } from "../shared/types/scorecardRowData";
 
 type ScorecardRowProps = {
   scorecardRowData: ScorecardRowData;

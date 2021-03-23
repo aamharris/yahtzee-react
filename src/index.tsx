@@ -2,8 +2,10 @@ import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import React from "react";
 import ReactDOM from "react-dom";
 import Game from "./game";
-import "./index.css";
+import "./index.scss";
 import reportWebVitals from "./reportWebVitals";
+import { Provider } from "react-redux";
+import store from "./store";
 
 const theme = createMuiTheme({
   palette: {
@@ -13,18 +15,18 @@ const theme = createMuiTheme({
   },
   overrides: {
     MuiTableCell: {
-      root: {
-        padding: "6px 6px",
-      },
+      root: { padding: "6px 6px" },
     },
   },
 });
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <Game />
-    </ThemeProvider>
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <Game />
+      </ThemeProvider>
+    </Provider>
   );
 }
 
